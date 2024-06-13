@@ -1,4 +1,4 @@
-package com.example.springsecurityjpa;
+package com.example.springsecurityjpa.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +20,8 @@ public class SecurityConfig {
 
     @Autowired
     private UserDetailsService userDetailsService;
+//    @Autowired
+//    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -40,14 +42,15 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/user").hasRole("USER")
+                                .requestMatchers("/user").permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/user").hasRole("ADMIN")
                                 .requestMatchers("/admin").hasRole("ADMIN")
                                 .requestMatchers("/create-user").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+//                        .successHandler(customAuthenticationSuccessHandler)
                         .permitAll())
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/create-user")

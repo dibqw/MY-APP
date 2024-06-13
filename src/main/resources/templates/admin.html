@@ -1,10 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Admin</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 <h2>Admin page</h2>
+<form th:action="@{/admin-user}" th:method="get">
+    <h4>Make user admin:</h4>
+    <div class="form-group">
+        <label for="username">User name:</label>
+        <input type="text" id="username" name="username" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add User to Admins</button>
+</form>
+<br/>
+<h4>Delete user:</h4>
+<div class="form-group">
+    <label for="delete-username">User name:</label>
+    <input type="text" id="delete-username" class="form-control" required>
+</div>
+<button type="button" class="btn btn-primary" onclick="deleteUser()">Delete</button>
+
+<script>
+function deleteUser() {
+    const username = document.getElementById('delete-username').value;
+    if (!username) {
+        alert('Please enter a username');
+        return;
+    }
+
+    // Retrieve the CSRF token and header name from the meta tags
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    fetch('/user?username=' + username, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            [csrfHeader]: csrfToken
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('User deleted successfully');
+        } else if (response.status === 403) {
+            alert('Forbidden: CSRF token invalid or missing');
+        } else {
+            alert('Failed to delete user');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred');
+    });
+}
+</script>
 </body>
 </html>

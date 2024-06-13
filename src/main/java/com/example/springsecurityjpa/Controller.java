@@ -5,10 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class Controller {
-    @GetMapping("/")
-    public String home() {
-        return ("<h1>Welcome</h1>");
-    }
+
 
     @GetMapping("/user")
     public String user() {
