@@ -66,6 +66,10 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+    public void addRole(Roles role) {
+        this.roles.add(role);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -102,6 +106,5 @@ public class User implements UserDetails {
     }
 
 
-    // Implement UserDetails methods (getAuthorities, isEnabled, getUsername, getPassword, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired)
-}
+    }
 

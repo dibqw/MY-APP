@@ -8,7 +8,8 @@
 <body>
 <div class="container mt-5">
   <h2>Create New User</h2>
-  <form th:action="@{/create-user}" th:object="${user}" th:method="post">
+  <form th:action="@{/user}" th:object="${user}" th:method="post">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
     <div class="form-group">
       <label for="username">Username</label>
       <input type="text" id="username" name="username" class="form-control" required>
